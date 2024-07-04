@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "declaration": false,
+        "module": "es2022",
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "target": "es2022",
+        "lib": ["es2022"],
+        "incremental": true,
+        "tsBuildInfoFile": "./.buildcache",
+        "strict": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
+    }
+}
