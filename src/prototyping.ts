@@ -3,7 +3,7 @@ import { NeuralNetwork } from 'brain.js';
 import { INeuralNetworkData, INeuralNetworkDatum } from 'brain.js/dist/neural-network';
 import Jimp from 'jimp';
 
-async function readTrainingData(): Promise<Jimp[]> {
+export async function readTrainingData(): Promise<Jimp[]> {
     const trainingDataImages = [];
     for (let i = 0; i < 18; i++) {
         const url = `./trainingData/character_zou/zou_charactrer_prepared_${i.toString()}_test.png`;
@@ -13,7 +13,7 @@ async function readTrainingData(): Promise<Jimp[]> {
     return trainingDataImages;
 }
 
-async function readAndConvertTrainingData(): Promise<number[][]> {
+export async function readAndConvertTrainingData(): Promise<number[][]> {
     const trainingDataImages = await readTrainingData();
     const trainingDataNumber: number[][] = [];
 
@@ -29,7 +29,7 @@ async function readAndConvertTrainingData(): Promise<number[][]> {
     return trainingDataNumber;
 }
 
-async function readTestData(): Promise<Jimp[]> {
+export async function readTestData(): Promise<Jimp[]> {
     const urls = [
         './testData/running_man_image_4_preprocessed_mirror_skeletonized_test.png',
         './testData/running_man_image_4_preprocessed_mirror.png',
@@ -45,7 +45,7 @@ async function readTestData(): Promise<Jimp[]> {
     return testDataImages;
 }
 
-async function readAndConvertTestData(): Promise<number[][]> {
+export async function readAndConvertTestData(): Promise<number[][]> {
     const testDataImages = await readTestData();
     const testData: number[][] = [];
 
@@ -61,7 +61,7 @@ async function readAndConvertTestData(): Promise<number[][]> {
     return testData;
 }
 
-async function trainModel(data: number[][]): Promise<NeuralNetwork<INeuralNetworkData, any>> {
+export async function trainModel(data: number[][]): Promise<NeuralNetwork<INeuralNetworkData, any>> {
     const net = new NeuralNetwork();
     const trainingData: Array<INeuralNetworkDatum<INeuralNetworkData, INeuralNetworkData>> = [];
 
@@ -76,16 +76,11 @@ async function trainModel(data: number[][]): Promise<NeuralNetwork<INeuralNetwor
     return net;
 }
 
-async function runTestDataThroughNeuralNetwork(net: NeuralNetwork<INeuralNetworkData, any>, testData: number[][]): Promise<void> {
+export async function runTestDataThroughNeuralNetwork(net: NeuralNetwork<INeuralNetworkData, any>, testData: number[][]): Promise<void> {
     for (let i = 0; i < testData.length; i++) {
         const result = net.run(testData[i]);
         console.log(result)
     }
 }
 
-const trainingData = await readAndConvertTrainingData();
-const testData = await readAndConvertTestData();
-const net = await trainModel(trainingData);
-
-await runTestDataThroughNeuralNetwork(net, testData);
 

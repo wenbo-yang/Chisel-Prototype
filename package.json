@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "test": "npx jest --runInBand --./test/unit",
+        "tests": "npx jest --runInBand --./test/unit",
         "build": "npx tsc",
         "start": "node dist/src/app.js",
         "watch": "npx tsc --watch",
