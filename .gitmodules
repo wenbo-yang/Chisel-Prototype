@@ -1,0 +1,3 @@
+[submodule "Chisel-Global-Common-Libraries"]
+	path = Chisel-Global-Common-Libraries
+	url = https://github.com/wenbo-yang/Chisel-Global-Common-Libraries.git
