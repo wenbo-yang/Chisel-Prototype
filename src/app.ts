@@ -1,7 +1,7 @@
-import { NeuralNetwork } from "brain.js";
-import { INeuralNetworkData, INeuralNetworkDatum } from "brain.js/dist/neural-network";
-import { convertBitmapDataToZeroOneMat } from './Chisel-Global-Common-Libraries/src/lib/binaryMatUtils';
-import Jimp from "jimp";
+import { convertBitmapDataToZeroOneMat } from '../Chisel-Global-Common-Libraries/src/lib/binaryMatUtils';
+import { NeuralNetwork } from 'brain.js';
+import { INeuralNetworkData, INeuralNetworkDatum } from 'brain.js/dist/neural-network';
+import Jimp from 'jimp';
 
 async function readTrainingData(): Promise<Jimp[]> {
     const trainingDataImages = [];
@@ -13,7 +13,8 @@ async function readTrainingData(): Promise<Jimp[]> {
     return trainingDataImages;
 }
 
-async function readAndConvertTrainingData(trainingDataImages: Jimp[]): Promise<number[][]> {
+async function readAndConvertTrainingData(): Promise<number[][]> {
+    const trainingDataImages = await readTrainingData();
     const trainingDataNumber: number[][] = [];
 
     for (let i = 0; i < trainingDataImages.length; i++) {
@@ -29,13 +30,36 @@ async function readAndConvertTrainingData(trainingDataImages: Jimp[]): Promise<n
 }
 
 async function readTestData(): Promise<Jimp[]> {
-    throw new Error('Not Implemented');
+    const urls = [
+        './testData/running_man_image_4_preprocessed_mirror_skeletonized_test.png',
+        './testData/running_man_image_4_preprocessed_mirror.png',
+        './testData/running_man_image_5_preprocessed_mirror_skeletonized_test.png',
+        './testData/running_man_image_5_preprocessed_mirror.png',
+    ];
+
+    const testDataImages = [];
+    for (let i = 0; i < urls.length; i++) {
+        testDataImages.push(await Jimp.read(urls[i]));
+    }
+
+    return testDataImages;
 }
 
 async function readAndConvertTestData(): Promise<number[][]> {
-    throw new Error('Not Implmented');
-}
+    const testDataImages = await readTestData();
+    const testData: number[][] = [];
 
+    for (let i = 0; i < testDataImages.length; i++) {
+        testData.push([]);
+        const bmpBuffer = await testDataImages[i].getBufferAsync(Jimp.MIME_BMP)
+        const mat = await convertBitmapDataToZeroOneMat(bmpBuffer, 250);
+
+        const flattenedData = mat.flat(1);
+        testData.push(flattenedData);
+    }
+
+    return testData;
+}
 
 async function trainModel(data: number[][]): Promise<NeuralNetwork<INeuralNetworkData, any>> {
     const net = new NeuralNetwork();
@@ -43,7 +67,7 @@ async function trainModel(data: number[][]): Promise<NeuralNetwork<INeuralNetwor
 
     for (let i = 0; i < data.length; i++) {
             let output: any = {};
-            output['走'] = 1;
+            output['zou'] = 1;
             let input: INeuralNetworkData = data[i];
             trainingData.push({ input, output });
     }
@@ -52,16 +76,16 @@ async function trainModel(data: number[][]): Promise<NeuralNetwork<INeuralNetwor
     return net;
 }
 
-async function runTestDataThroughNeuralNetwork(net: NeuralNetwork<INeuralNetworkData, any>, testData: number[][]): Promise<any> {
-    throw new Error("Function not implemented.");
+async function runTestDataThroughNeuralNetwork(net: NeuralNetwork<INeuralNetworkData, any>, testData: number[][]): Promise<void> {
+    for (let i = 0; i < testData.length; i++) {
+        const result = net.run(testData[i]);
+        console.log(result)
+    }
 }
 
-
-const trainingImages = await readTrainingData();
-const trainingData = await readAndConvertTrainingData(trainingImages);
-const net = await trainModel(trainingData);
+const trainingData = await readAndConvertTrainingData();
 const testData = await readAndConvertTestData();
-const result = await runTestDataThroughNeuralNetwork(net, testData);
+const net = await trainModel(trainingData);
 
-console.log(result);
+await runTestDataThroughNeuralNetwork(net, testData);
 
