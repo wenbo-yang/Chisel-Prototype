@@ -133,5 +133,8 @@ dist
 # package-lock
 package-lock.json
 
+# mac file
+.DS_Store
+
 # ignore test bitmap
 *test.bmp
