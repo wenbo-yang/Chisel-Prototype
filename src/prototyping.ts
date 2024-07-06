@@ -1,6 +1,4 @@
 import { convertBitmapDataToZeroOneMat } from '../Chisel-Global-Common-Libraries/src/lib/binaryMatUtils';
-import { NeuralNetwork } from 'brain.js';
-import { INeuralNetworkData, INeuralNetworkDatum } from 'brain.js/dist/neural-network';
 import Jimp from 'jimp';
 
 export async function readTrainingData(character: string): Promise<Jimp[]> {
@@ -89,40 +87,40 @@ export async function readAndConvertTestData(): Promise<number[][]> {
     return testData;
 }
 
-export async function trainModel(zou: number[][], yang: number[][], niu: number[][]): Promise<NeuralNetwork<INeuralNetworkData, any>> {
-    const net = new NeuralNetwork();
-    const trainingData: Array<INeuralNetworkDatum<INeuralNetworkData, INeuralNetworkData>> = [];
+// export async function trainModel(zou: number[][], yang: number[][], niu: number[][]): Promise<NeuralNetwork<INeuralNetworkData, any>> {
+//     const net = new NeuralNetwork();
+//     const trainingData: Array<INeuralNetworkDatum<INeuralNetworkData, INeuralNetworkData>> = [];
 
-    for (let i = 0; i < zou.length; i++) {
-            let output: any = {};
-            output['zou'] = 1;
-            let input: INeuralNetworkData = zou[i];
-            trainingData.push({ input, output });
-    }
+//     for (let i = 0; i < zou.length; i++) {
+//             let output: any = {};
+//             output['zou'] = 1;
+//             let input: INeuralNetworkData = zou[i];
+//             trainingData.push({ input, output });
+//     }
 
-    for (let i = 0; i < yang.length; i++) {
-        let output: any = {};
-        output['yang'] = 1;
-        let input: INeuralNetworkData = yang[i];
-        trainingData.push({ input, output });
-    }
+//     for (let i = 0; i < yang.length; i++) {
+//         let output: any = {};
+//         output['yang'] = 1;
+//         let input: INeuralNetworkData = yang[i];
+//         trainingData.push({ input, output });
+//     }
 
-    for (let i = 0; i < niu.length; i++) {
-        let output: any = {};
-        output['niu'] = 1;
-        let input: INeuralNetworkData = niu[i];
-        trainingData.push({ input, output });
-    }
+//     for (let i = 0; i < niu.length; i++) {
+//         let output: any = {};
+//         output['niu'] = 1;
+//         let input: INeuralNetworkData = niu[i];
+//         trainingData.push({ input, output });
+//     }
 
-    await net.trainAsync(trainingData);
-    return net;
-}
+//     await net.trainAsync(trainingData);
+//     return net;
+// }
 
-export async function runTestDataThroughNeuralNetwork(net: NeuralNetwork<INeuralNetworkData, any>, testData: number[][]): Promise<void> {
-    for (let i = 0; i < testData.length; i++) {
-        const result = net.run(testData[i]);
-        console.log(result)
-    }
-}
+// export async function runTestDataThroughNeuralNetwork(net: NeuralNetwork<INeuralNetworkData, any>, testData: number[][]): Promise<void> {
+//     for (let i = 0; i < testData.length; i++) {
+//         const result = net.run(testData[i]);
+//         console.log(result)
+//     }
+// }
 
 
